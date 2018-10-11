@@ -58,7 +58,11 @@
     "tags": ["4_letter_code", "writing", "information", "letter_code", "code"]
   },
   {
-    "name": "Letter-Number Cypher",
+    "name": "Letter-Digit Cypher",
     "tags": ["letter_digit_cypher", "writing", "information", "cypher"]
+  },
+  {
+    "name": "Digit-Letter Cypher",
+    "tags": ["digit_letter_cypher", "writing", "information", "cypher"]
   }
 ]

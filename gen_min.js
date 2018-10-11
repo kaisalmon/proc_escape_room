@@ -159,11 +159,14 @@ EscapeRoom.prototype.fix_dangling_node = function(n){
   for(let i in inputs){
     let puzzle_options = []
     let tag = inputs[i]
-    if(!items_by_tag[tag] || items_by_tag[tag].length==0){
-      throw "No items have the tag "+tag
-    }
-    for(let j in items_by_tag[tag]){
-      let item = items_by_tag[tag][j]
+    let possible_items = typeof(tag) == "string"
+                         ?items_by_tag[tag]
+                         : [tag]
+     if(possible_items.length==0){
+       throw "No items have the tag "+tag
+     }
+    for(let j in possible_items ){
+      let item = possible_items[j]
       let outputs = this.get_puzzles_from_output_item(item, n)
       for(let k in outputs){
         let puzzle = outputs[k]
@@ -315,8 +318,12 @@ module.exports=[
     "tags": ["4_letter_code", "writing", "information", "letter_code", "code"]
   },
   {
-    "name": "Letter-Number Cypher",
+    "name": "Letter-Digit Cypher",
     "tags": ["letter_digit_cypher", "writing", "information", "cypher"]
+  },
+  {
+    "name": "Digit-Letter Cypher",
+    "tags": ["digit_letter_cypher", "writing", "information", "cypher"]
   }
 ]
 
@@ -4212,6 +4219,11 @@ module.exports=[
     "inputs": [ "4_letter_code", "letter_digit_cypher"]
   },
   {
+    "name": "Apply Cypher",
+    "outputs":[ "4_letter_code"],
+    "inputs": [ "4_digit_code", "digit_letter_cypher"]
+  },
+  {
     "name": "Standalone Keypad",
     "outputs":[ "signal"],
     "inputs": ["digit_code" ]
@@ -4239,6 +4251,11 @@ module.exports=[
     "outputs":[ "signal"]
   },
   {
+    "name": "Key Switch",
+    "inputs": ["key"],
+    "outputs":[ "signal"]
+  },
+  {
     "name": "Hidden Compartment",
     "outputs":[ "object"],
     "inputs": ["signal"]
@@ -4247,6 +4264,14 @@ module.exports=[
     "name": "Read Item",
     "outputs":[ "writing"],
     "inputs": ["readable"]
+  },
+  {
+    "name": "Ball Puzzle",
+    "outputs":[ "object"],
+    "inputs": [{
+        "name": "Metal Ball",
+        "tags": ["object", "conductive", "object_small"]
+    }]
   }
 ]
 

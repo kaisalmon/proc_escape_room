@@ -158,11 +158,14 @@ EscapeRoom.prototype.fix_dangling_node = function(n){
   for(let i in inputs){
     let puzzle_options = []
     let tag = inputs[i]
-    if(!items_by_tag[tag] || items_by_tag[tag].length==0){
-      throw "No items have the tag "+tag
-    }
-    for(let j in items_by_tag[tag]){
-      let item = items_by_tag[tag][j]
+    let possible_items = typeof(tag) == "string"
+                         ?items_by_tag[tag]
+                         : [tag]
+     if(possible_items.length==0){
+       throw "No items have the tag "+tag
+     }
+    for(let j in possible_items ){
+      let item = possible_items[j]
       let outputs = this.get_puzzles_from_output_item(item, n)
       for(let k in outputs){
         let puzzle = outputs[k]

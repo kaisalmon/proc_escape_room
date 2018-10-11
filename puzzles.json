@@ -31,6 +31,11 @@
     "inputs": [ "4_letter_code", "letter_digit_cypher"]
   },
   {
+    "name": "Apply Cypher",
+    "outputs":[ "4_letter_code"],
+    "inputs": [ "4_digit_code", "digit_letter_cypher"]
+  },
+  {
     "name": "Standalone Keypad",
     "outputs":[ "signal"],
     "inputs": ["digit_code" ]
@@ -58,6 +63,11 @@
     "outputs":[ "signal"]
   },
   {
+    "name": "Key Switch",
+    "inputs": ["key"],
+    "outputs":[ "signal"]
+  },
+  {
     "name": "Hidden Compartment",
     "outputs":[ "object"],
     "inputs": ["signal"]
@@ -66,5 +76,13 @@
     "name": "Read Item",
     "outputs":[ "writing"],
     "inputs": ["readable"]
+  },
+  {
+    "name": "Ball Puzzle",
+    "outputs":[ "object"],
+    "inputs": [{
+        "name": "Metal Ball",
+        "tags": ["object", "conductive", "object_small"]
+    }]
   }
 ]
