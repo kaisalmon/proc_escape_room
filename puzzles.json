@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Pick up item",
+    "outputs": ["object_small"],
+    "max": 10
+  },
+  {
+    "name": "Open locked drawer",
+    "outputs":[ "object_small"],
+    "inputs": ["key"],
+    "max": 2
+  },
+  {
+    "name": "Open locked safe",
+    "outputs":[ "object"],
+    "inputs": ["key"],
+    "max": 2
+  },
+  {
+    "name": "Complete Puzzle",
+    "outputs":[ "signal"],
+    "inputs": ["puzzle_piece","puzzle_piece","puzzle_piece","puzzle_piece"]
+  },
+  {
+    "name": "Apply Cypher",
+    "outputs":[ "4_digit_code"],
+    "inputs": [ "4_letter_code", "letter_digit_cypher"]
+  },
+  {
+    "name": "Standalone Keypad",
+    "outputs":[ "signal"],
+    "inputs": ["digit_code" ]
+  },
+  {
+    "name": "Locked Briefcase",
+    "outputs":[ "object"],
+    "inputs": ["6_digit_code" ]
+  },
+  {
+    "name": "Inspect Wall Writing",
+    "outputs":["writing"],
+    "inputs": []
+  },
+  {
+    "name": "Cause Power Outage",
+    "outputs":[ "signal"],
+    "inputs": ["conductive"]
+  },
+  {
+    "name": "Press Button",
+    "outputs":[ "signal"]
+  },
+  {
+    "name": "Hidden Compartment",
+    "outputs":[ "object"],
+    "inputs": ["signal"]
+  },
+  {
+    "name": "Read Item",
+    "outputs":[ "writing"],
+    "inputs": ["readable"]
+  }
+]
