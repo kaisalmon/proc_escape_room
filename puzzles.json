@@ -7,12 +7,16 @@
   {
     "name": "Open locked drawer",
     "outputs":[ "object_small"],
+    "optional_outputs":[ "object_small"],
+    "max_optional": 1,
     "inputs": ["key"],
     "max": 2
   },
   {
     "name": "Open locked safe",
     "outputs":[ "object"],
+    "optional_outputs":["object","object_small"],
+    "max_optional": 2,
     "inputs": ["key"],
     "max": 2
   },
@@ -34,6 +38,8 @@
   {
     "name": "Locked Briefcase",
     "outputs":[ "object"],
+    "optional_outputs":["object_small"],
+    "max_optional": 1,
     "inputs": ["6_digit_code" ]
   },
   {
@@ -44,6 +50,7 @@
   {
     "name": "Cause Power Outage",
     "outputs":[ "signal"],
+    "optional_outputs":["signal"],
     "inputs": ["conductive"]
   },
   {
