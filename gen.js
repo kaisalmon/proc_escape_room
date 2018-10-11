@@ -94,9 +94,10 @@ EscapeRoom.prototype.get_puzzles_from_output_item = function(item, child_puzzle)
     }
   }
 
+  result = result.filter((p)=> this.is_puzzle_allowed(p))
+
   if(this.nodes.length > MAX_PUZZLES){
     let filtered_result = result.filter((n)=>n.used_in_room || n.inputs ===undefined || n.inputs.length ==  0)
-    console.log("Too big, better filter out things which increase size")
     if(filtered_result.length > 0){
       return filtered_result
     }
@@ -106,7 +107,6 @@ EscapeRoom.prototype.get_puzzles_from_output_item = function(item, child_puzzle)
     let filtered_result = result.filter((n)=>
       !n.used_in_room && n.inputs && n.inputs.length > 0
     )
-    console.log("Too small, better filter out things which don't increase size")
     if(filtered_result.length > 0){
       return filtered_result
     }
@@ -114,7 +114,22 @@ EscapeRoom.prototype.get_puzzles_from_output_item = function(item, child_puzzle)
 
   return result
 }
-
+EscapeRoom.prototype.is_puzzle_allowed = function(puzzle){
+  if(puzzle.make_tag_unique){
+    for(var i in this.nodes){
+      for(var j in this.nodes[i].input_items){
+        let item = this.nodes[i].input_items[j]
+        for(j in puzzle.make_tag_unique){
+          let tag = puzzle.make_tag_unique[j];
+          if(item.tags.indexOf(tag) !== -1){
+            return false;
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
 EscapeRoom.prototype.to_dotviz = function(){
 
   let item_style = "[shape=diamond fontsize=8 margin=0.03]"
@@ -158,9 +173,10 @@ EscapeRoom.prototype.fix_dangling_node = function(n){
   for(let i in inputs){
     let puzzle_options = []
     let tag = inputs[i]
-    let possible_items = typeof(tag) == "string"
-                         ?items_by_tag[tag]
-                         : [tag]
+    let possible_items = items_by_tag[tag]
+    possible_items = possible_items.filter(
+      (item) => item.lock === undefined || item.lock === n
+    )
      if(possible_items.length==0){
        throw "No items have the tag "+tag
      }
@@ -227,6 +243,27 @@ EscapeRoom.prototype.fix_dangling_node = function(n){
       puzzle.used_in_room = true
       if(puzzle.inputs && puzzle.inputs.length > 0){
         this.dangling_nodes.push(puzzle)
+      }
+
+      //Remove items from pool if making tag make_tag_unique
+      if(puzzle.make_tag_unique){
+        for(var j in puzzle.make_tag_unique){
+          let tag = puzzle.make_tag_unique[j]
+          let items = items_by_tag[tag];
+          for(let k in items){
+            if(items[k].lock === undefined){
+              // This item is not claimed by any puzzle, so claim it
+              items[k].lock = puzzle
+              console.error("Locking",items[k].name,"for all but",puzzle.name)
+            }else {
+              // If too dangling puzzles are fighting over
+              // the same item, then neither should be able to
+              // Claim it
+              items[k].lock = "NOONE"
+              console.error("Locking",items[k].name,"for everyone")
+            }
+          }
+        }
       }
     }
   }

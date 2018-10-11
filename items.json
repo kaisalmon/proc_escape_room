@@ -64,5 +64,13 @@
   {
     "name": "Digit-Letter Cypher",
     "tags": ["digit_letter_cypher", "writing", "information", "cypher"]
+  },
+  {
+    "name": "Bean Ball",
+    "tags": ["object", "object_small", "ball_small"]
+  },
+  {
+    "name": "Metal Ball",
+    "tags": ["conductive", "object", "object_small", "ball_small"]
   }
 ]

@@ -56,7 +56,8 @@
     "name": "Cause Power Outage",
     "outputs":[ "signal"],
     "optional_outputs":["signal"],
-    "inputs": ["conductive"]
+    "inputs": ["conductive"],
+    "make_tag_unique": ["conductive"]
   },
   {
     "name": "Press Button",
@@ -80,9 +81,7 @@
   {
     "name": "Ball Puzzle",
     "outputs":[ "object"],
-    "inputs": [{
-        "name": "Metal Ball",
-        "tags": ["object", "conductive", "object_small"]
-    }]
+    "inputs": ["ball_small"],
+    "make_tag_unique": ["ball_small"]
   }
 ]
