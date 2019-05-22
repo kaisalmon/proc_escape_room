@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Pick up item",
+    "outputs": ["object_small"],
+    "max": 10
+  },
+  {
+    "name": "Open locked drawer",
+    "outputs":[ "object_small"],
+    "optional_outputs":[ "object_small"],
+    "max_optional": 1,
+    "inputs": ["key"],
+    "max": 2
+  },
+  {
+    "name": "Open locked safe",
+    "outputs":[ "object"],
+    "optional_outputs":["object","object_small"],
+    "max_optional": 2,
+    "inputs": ["key"],
+    "max": 2
+  },
+  {
+    "name": "Complete Puzzle",
+    "outputs":[ "signal"],
+    "inputs": ["puzzle_piece","puzzle_piece","puzzle_piece","puzzle_piece"]
+  },
+  {
+    "name": "Apply Cypher",
+    "outputs":[ "4_digit_code"],
+    "inputs": [ "4_letter_code", "letter_digit_cypher"]
+  },
+  {
+    "name": "Apply Cypher",
+    "outputs":[ "4_letter_code"],
+    "inputs": [ "4_digit_code", "digit_letter_cypher"]
+  },
+  {
+    "name": "Standalone Keypad",
+    "outputs":[ "signal"],
+    "inputs": ["digit_code" ]
+  },
+  {
+    "name": "Locked Briefcase",
+    "outputs":[ "object"],
+    "optional_outputs":["object_small"],
+    "max_optional": 1,
+    "inputs": ["6_digit_code" ]
+  },
+  {
+    "name": "Inspect Wall Writing",
+    "outputs":["writing"],
+    "inputs": []
+  },
+  {
+    "name": "Cause Power Outage",
+    "outputs":[ "signal"],
+    "optional_outputs":["signal"],
+    "inputs": ["conductive"],
+    "make_tag_unique": ["conductive"]
+  },
+  {
+    "name": "Press Button",
+    "outputs":[ "signal"]
+  },
+  {
+    "name": "Key Switch",
+    "inputs": ["key"],
+    "outputs":[ "signal"]
+  },
+  {
+    "name": "Hidden Compartment",
+    "outputs":[ "object"],
+    "inputs": ["signal"]
+  },
+  {
+    "name": "Read Item",
+    "outputs":[ "writing"],
+    "inputs": ["readable"],
+    "max": 4
+  },
+  {
+    "name": "Open Locked Door",
+    "inputs": ["key"],
+    "door" : true
+  },
+  {
+    "name": "Open Secret Painting",
+    "inputs": ["signal"],
+    "door" : true
+  },
+  {
+    "name": "Ball Puzzle",
+    "outputs":[ "object"],
+    "inputs": ["ball_small"],
+    "make_tag_unique": ["ball_small"]
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "name": "Gold Key",
+    "tags": ["key", "object", "object_small"]
+  },
+  {
+    "name": "Silver Key",
+    "tags": ["key", "object", "object_small"]
+  },
+  {
+    "name": "Modern Key",
+    "tags": ["key", "object", "object_small"]
+  },
+  {
+    "name": "Brass Key",
+    "tags": ["key", "object", "object_small", "conductive"]
+  },
+  {
+    "name": "Metalic Key",
+    "tags": ["key", "object", "object_small", "conductive"]
+  },
+  {
+    "name": "Metal Scrap",
+    "tags": ["object", "object_small", "conductive"]
+  },
+  {
+    "name": "Roll of Wire",
+    "tags": ["object", "conductive"]
+  },
+  {
+    "name": "Giant Stone Key",
+    "tags": ["key", "object", "object_large"]
+  },
+  {
+    "name": "Puzzle Piece",
+    "tags": ["object", "puzzle_piece", "object_small"],
+    "max": 5
+  },
+  {
+    "name": "Paper Note",
+    "tags": ["object", "object_small", "readable"],
+    "max": 3
+  },
+  {
+    "name": "Electrical Signal",
+    "tags": ["signal"],
+    "max": 4
+  },
+  {
+    "name": "Four Digit Code",
+    "tags": ["4_digit_code", "writing", "information", "digit_code", "code"]
+  },
+  {
+    "name": "Six Digit Code",
+    "tags": ["6_digit_code", "writing", "information", "digit_code", "code"]
+  },
+  {
+    "name": "Eight Digit Code",
+    "tags": ["8_digit_code", "writing", "information", "digit_code", "code"]
+  },
+  {
+    "name": "Four Letter Code",
+    "tags": ["4_letter_code", "writing", "information", "letter_code", "code"]
+  },
+  {
+    "name": "Letter-Digit Cypher",
+    "tags": ["letter_digit_cypher", "writing", "information", "cypher"]
+  },
+  {
+    "name": "Digit-Letter Cypher",
+    "tags": ["digit_letter_cypher", "writing", "information", "cypher"]
+  },
+  {
+    "name": "Bean Ball",
+    "tags": ["object", "object_small", "ball_small"]
+  },
+  {
+    "name": "Metal Ball",
+    "tags": ["conductive", "object", "object_small", "ball_small"]
+  }
+]
