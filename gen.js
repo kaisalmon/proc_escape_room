@@ -1,6 +1,29 @@
+
+var _ = require('./lodash.core.js');
+require('./seedrandom.js');
+
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+          tmp = item.split("=");
+          if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
+let seed = findGetParameter("seed")
+if(!seed){
+  Math.seedrandom();
+  seed = ""+Math.floor(1000000 * Math.random());
+}
+console.log("using seed",seed)
+Math.seedrandom(seed)
+
 var items = require("./items.json")
 var puzzles = require("./puzzles.json")
-var _ = require('./lodash.core.js');
 
 var items_by_tag = sort_by_tag(items);
 var puzzles_by_output = sort_by_tag(puzzles, "outputs");
@@ -60,15 +83,35 @@ function remove_puzzle_from_pool(puzzle){
 
 
 function EscapeRoom(){
+  this.areas = ["final_area"]
   this.nodes = [];
   this.dangling_nodes = [];
   this.items_by_name = {};
   this.puzzles_by_name = {};
 }
 
+EscapeRoom.prototype.add_area = function(area_name){
+  let possible_doors = puzzles.filter(p=>p.door && this.is_puzzle_allowed(p));
+  let door = possible_doors[Math.floor(Math.random() * possible_doors.length)]
+  door.gives_access_to = this.areas[this.areas.length - 1]
+  this.areas.push(area_name)
+  door.gives_access_from = area_name
+  this.nodes.push(door)
+  this.dangling_nodes.push(door)
+}
 EscapeRoom.prototype.get_dangling_inputs = function(){
   var inputs = this.dangling_nodes.map(x=> x.inputs || [])
   return [].concat.apply([], inputs);
+}
+
+EscapeRoom.prototype.is_area_starter = function(puzzle){
+  if(puzzle.area === undefined) return false
+    for(var i in puzzle.input_items){
+      let item = puzzle.input_items[i]
+        let parent = this.nodes.find((p)=>p.output_items && p.output_items.indexOf(item) !== -1)
+        if(parent.area === puzzle.area)return false
+    }
+    return true;
 }
 
 EscapeRoom.prototype.get_puzzles_from_output_item = function(item, child_puzzle){
@@ -76,13 +119,16 @@ EscapeRoom.prototype.get_puzzles_from_output_item = function(item, child_puzzle)
   for(let i in item.tags){
     let tag = item.tags[i]
 
-    for(let j in this.nodes){
-      let puzzle = this.nodes[j]
-      if(this.dangling_nodes.indexOf(puzzle) !== -1
-      && puzzle != child_puzzle
-      && (puzzle.max_optional === undefined || puzzle.max_optional > 0)){
-        if(puzzle.optional_outputs && puzzle.optional_outputs.indexOf(tag) !== -1){
-          result.push(puzzle)
+    if(!child_puzzle.door){ // Attaching doors to existing nodes is v. dangerous, as they might be in that room
+                            // TODO: Do clever things about checking where the door goes and if is allowed
+      for(let j in this.nodes){
+        let puzzle = this.nodes[j]
+        if(this.dangling_nodes.indexOf(puzzle) !== -1
+        && puzzle != child_puzzle
+        && (puzzle.max_optional === undefined || puzzle.max_optional > 0)){
+          if(puzzle.optional_outputs && puzzle.optional_outputs.indexOf(tag) !== -1){
+            result.push(puzzle)
+          }
         }
       }
     }
@@ -134,15 +180,41 @@ EscapeRoom.prototype.to_dotviz = function(){
 
   let item_style = "[shape=diamond fontsize=8 margin=0.03]"
   let dangling_style = "[color=red fontcolor=red]"
-
   let result = ""
   result+="digraph G { node [shape=box];"
+
+  for(let i in this.areas){
+    let area = this.areas[i];
+    result+="subgraph cluster_"+i+" {";
+		result+= 'label = "'+area+'";'
+    for(let i in this.nodes){
+      let n = this.nodes[i]
+      if(n.area == area){
+        let style = ""
+        result+='"'+n.name+"\""+style+";"
+        for(let j in n.output_items){
+          let item = n.output_items[j]
+          result += '"'+item.name+'";'
+        }
+      }
+    }
+    result+="}"
+  }
+
   if(this.nodes.filter(n => !n.inputs || n.inputs.length == 0).length > 0){
     result+= "start[shape=doublecircle];"
   }
   for(let i in this.nodes){
     let n = this.nodes[i]
-    if(!n.inputs || n.inputs.length == 0){
+    if(this.is_area_starter(n)){
+      let door = this.nodes.find(p => p.gives_access_to === n.area);
+      if(door){
+        result+='"'+door.name + '"-> "' + n.name+'\";'
+      }
+    }
+
+
+    if(!n.inputs || n.inputs.length == 0 && n.area==this.areas[this.areas.length-1]){
       result+= "start-> \""+n.name+"\";"
     }
     let style = this.dangling_nodes.indexOf(n) === -1
@@ -254,24 +326,27 @@ EscapeRoom.prototype.fix_dangling_node = function(n){
             if(items[k].lock === undefined){
               // This item is not claimed by any puzzle, so claim it
               items[k].lock = puzzle
-              console.error("Locking",items[k].name,"for all but",puzzle.name)
+              //console.error("Locking",items[k].name,"for all but",puzzle.name)
             }else {
               // If too dangling puzzles are fighting over
               // the same item, then neither should be able to
               // Claim it
               items[k].lock = "NOONE"
-              console.error("Locking",items[k].name,"for everyone")
+              //console.error("Locking",items[k].name,"for everyone")
             }
           }
         }
       }
+
+      //Mark area to the most recient (earliest in game flow) area
+      puzzle.area = this.areas[this.areas.length-1];
     }
   }
   this.dangling_nodes.splice(this.dangling_nodes.indexOf(n),1)
 }
 
 
-let MIN_PUZZLES = 6
+let MIN_PUZZLES = 10
 let MAX_PUZZLES = 12
 let room = new EscapeRoom();
 let door = {name:"Final Door", inputs:["key", "signal"]}
@@ -279,16 +354,29 @@ room.nodes.push(door)
 room.dangling_nodes.push(door)
 try{
   var viz = new Viz();
+  let i = 0;
   while(room.dangling_nodes.length > 0){
+    i++;
     let index = Math.floor(Math.random()*room.dangling_nodes.length)
     room.fix_dangling_node(room.dangling_nodes[index])
-
-    viz.renderSVGElement(room.to_dotviz())
+    if(i==6){
+      room.add_area("first_room")
+    }
+  
+    let dot = room.to_dotviz();
+    viz.renderSVGElement(dot)
     .then(function(element) {
       document.body.appendChild(element);
     });
-  }
 
+  }
+  console.log(dot)
 }catch(e){
   console.error(e)
 }
+
+let dot = room.to_dotviz();
+viz.renderSVGElement(dot)
+.then(function(element) {
+  document.body.appendChild(element);
+});

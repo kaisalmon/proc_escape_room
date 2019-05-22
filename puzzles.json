@@ -76,7 +76,18 @@
   {
     "name": "Read Item",
     "outputs":[ "writing"],
-    "inputs": ["readable"]
+    "inputs": ["readable"],
+    "max": 4
+  },
+  {
+    "name": "Open Locked Door",
+    "inputs": ["key"],
+    "door" : true
+  },
+  {
+    "name": "Open Secret Painting",
+    "inputs": ["signal"],
+    "door" : true
   },
   {
     "name": "Ball Puzzle",

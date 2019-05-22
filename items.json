@@ -8,6 +8,10 @@
     "tags": ["key", "object", "object_small"]
   },
   {
+    "name": "Modern Key",
+    "tags": ["key", "object", "object_small"]
+  },
+  {
     "name": "Brass Key",
     "tags": ["key", "object", "object_small", "conductive"]
   },
@@ -34,7 +38,8 @@
   },
   {
     "name": "Paper Note",
-    "tags": ["object", "object_small", "readable"]
+    "tags": ["object", "object_small", "readable"],
+    "max": 3
   },
   {
     "name": "Electrical Signal",
