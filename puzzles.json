@@ -5,6 +5,15 @@
     "max": 10
   },
   {
+    "name": "Check Pocket",
+    "inputs": ["has_pockets"],
+    "outputs": ["object_small"],
+  },
+  {
+    "name": "Pick Up from Coat Hook",
+    "outputs": ["clothing"],
+  },
+  {
     "name": "Open locked drawer",
     "outputs":[ "object_small"],
     "optional_outputs":[ "object_small"],

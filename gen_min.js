@@ -462,6 +462,10 @@ module.exports=[
   {
     "name": "Metal Ball",
     "tags": ["conductive", "object", "object_small", "ball_small"]
+  },
+  {
+    "name": "Coat",
+    "tags": ["object", "object_large", "clothing", "has_pockets"]
   }
 ]
 
@@ -4329,6 +4333,15 @@ module.exports=[
     "name": "Pick up item",
     "outputs": ["object_small"],
     "max": 10
+  },
+  {
+    "name": "Check Pocket",
+    "inputs": ["has_pockets"],
+    "outputs": ["object_small"],
+  },
+  {
+    "name": "Pick Up from Coat Hook",
+    "outputs": ["clothing"],
   },
   {
     "name": "Open locked drawer",
